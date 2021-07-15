@@ -1,0 +1,7 @@
+com\example\shopping\service\impl\BrandServiceImpl.class
+com\example\shopping\model\Brand.class
+com\example\shopping\ShoppingApplication.class
+com\example\shopping\utils\PageResult.class
+com\example\shopping\controller\BrandController.class
+com\example\shopping\dao\BrandMapper.class
+com\example\shopping\service\BrandService.class
