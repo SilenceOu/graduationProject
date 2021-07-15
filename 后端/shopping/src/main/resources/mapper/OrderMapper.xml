@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shopping.dao.OrderDao">
+    <select id="selectByAddressId" resultType="order" parameterType="Integer">
+        select * from salesorder
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="addressId != null ">
+                and addressId = #{addressId}
+            </if>
+        </trim>
+    </select>
+
+    <update id="updateStatus" parameterType="order">
+        update salesorder set status=#{status} where id=#{id}
+    </update>
+
+    <select id="searchByUser" parameterType="order" resultType="order">
+        select * from salesorder where userId=#{userId}
+    </select>
+
+    <insert id="create" parameterType="order">
+        insert into salesorder(userId,addressId,status,allMoney,commodityIds,number) values (#{userId},#{addressId},#{status},#{allMoney},#{commodityIds},#{number})
+    </insert>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shopping.dao.AddressDao">
+
+    <select id="search" parameterType="address" resultType="address">
+        select * from address where userId=#{userId}
+    </select>
+
+    <select id="selectOne" parameterType="Integer" resultType="address">
+        select * from address where id=#{id}
+    </select>
+
+    <insert id="insertOne" parameterType="address">
+        insert into address(name,phone,city,detailAddress,userId) values (#{name},#{phone},#{city},#{detailAddress},#{userId})
+    </insert>
+
+    <update id="updateOne" parameterType="address">
+        update address set name=#{name}, phone=#{phone},city=#{city},detailAddress=#{detailAddress} where id=#{id}
+    </update>
+
+    <delete id="deleteOne" parameterType="Integer">
+        delete from address where id=#{id}
+    </delete>
+
+    <select id="selectIdByCondition" resultType="Integer" >
+        select id from address
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="name != null and name != ''">
+                and name like "%"#{name}"%"
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone=#{phone}
+            </if>
+        </trim>
+    </select>
+</mapper>
