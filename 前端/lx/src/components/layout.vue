@@ -39,6 +39,7 @@
       <el-breadcrumb-item
         v-for="(item,index) in breadcrumbList"
         :to="{ path: item.path}"
+        :key="item"
       >
         {{item.name}}
       </el-breadcrumb-item>

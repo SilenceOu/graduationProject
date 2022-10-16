@@ -15,6 +15,7 @@
       </el-table-column>
       <el-table-column
         v-for="(item ,i) in tableColumn"
+        :key="item"
         :label="item.label"
         :prop="item.prop"
         width="180"
@@ -23,13 +24,13 @@
 
       </el-table-column>
       <el-table-column prop="pictures" label="商品图片" v-if="modal=='commodity'" align="center">
-        <template scope="scope">
-          　　　　<img :src="scope.row.image" width="40" height="40" class="head_pic"/>　
+        <template slot-scope="scope">
+          <img :src="scope.row.image" width="40" height="40" class="head_pic"/>
         </template>
       </el-table-column>
       <el-table-column prop="pictures" label="头像图片" v-if="modal=='manager'||modal=='user'" align="center">
-        <template scope="scope">
-          　　　　<img :src="scope.row.avatar" width="40" height="40" class="head_pic"/>　
+        <template slot-scope="scope">
+          <img :src="scope.row.avatar" width="40" height="40" class="head_pic"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
