@@ -4,9 +4,14 @@ import com.example.shopping.model.Address;
 import com.example.shopping.model.Cart;
 import com.example.shopping.model.LoginMessage;
 import com.example.shopping.model.User;
+import com.example.shopping.result.Result;
+import com.example.shopping.result.ResultFactory;
 import com.example.shopping.service.UserService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,9 +36,13 @@ public class UserController {
         return userService.register(user);
     }
 
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
-    public List<User> search(User user){
-        return userService.search(user);
+    //分页查询用户数据
+    @PostMapping("/search")
+    public Result search(User user){
+        PageHelper.startPage(user.getPageable().get("pageNum"),user.getPageable().get("pageSize"));
+        List<User> userList = userService.search(user);
+        PageInfo<User> userPageInfo = new PageInfo<>(userList);
+        return ResultFactory.buildSuccessResult(userPageInfo);
     }
 
     @RequestMapping(value = "/get",method = RequestMethod.POST)
@@ -49,11 +58,6 @@ public class UserController {
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public String delete(Integer id){
         return userService.deleteOne(id);
-    }
-
-    @RequestMapping(value = "/count",method = RequestMethod.POST)
-    public Integer count(User user){
-        return userService.getTotalCount(user);
     }
 
     @RequestMapping(value = "/getCart",method = RequestMethod.POST)

@@ -42,8 +42,6 @@
         console.log(this.searchItem)
       },
       search() {
-        console.log(11111)
-
         this.$store.dispatch('search', this.searchItem)
         if(this.modal=='order'){
           bus.$emit('onSearchOrder')

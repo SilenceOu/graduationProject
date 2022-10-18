@@ -81,7 +81,7 @@
             <artifactId>jackson-module-parameter-names</artifactId>
         </dependency>
 
-        <!-- 分页插件 -->
+        <!--MyBatis 分页插件: MyBatis PageHelper-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>

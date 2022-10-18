@@ -80,10 +80,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public Integer getTotalCount(User user) {
-        return userDao.getTotalCount(user);
-    }
     //获取用户下的购物车
     @Override
     public List<Cart> getCart(Integer userId) {

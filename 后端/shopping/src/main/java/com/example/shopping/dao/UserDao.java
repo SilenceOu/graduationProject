@@ -21,7 +21,5 @@ public interface UserDao {
     public Integer updateOne(User user);
     //根据ID删除记录
     public Integer deleteOne(Integer id);
-    //获取总记录数
-    public Integer getTotalCount(User user);
 
 }

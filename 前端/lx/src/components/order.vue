@@ -8,7 +8,7 @@
           <span style="margin-left: 40px">收货地址:{{item.address.city}}{{item.address.detailAddress}}</span>
           <span style="margin-left: 40px">联系电话:{{item.address.phone}}</span>
           <el-button v-if="item.status!=='已发货'&&item.status!=='已收货'" style="float: right; padding: 3px 0" type="text"
-                     @click="openReceive(item.id)">确认发货
+            @click="openReceive(item.id)">确认发货
           </el-button>
         </div>
         <div v-for="(s,i) in item.commodityList" :key="i" style="margin: 15px 0;display: flex;align-items: center">
@@ -24,25 +24,16 @@
     </div>
 
 
-    <el-dialog
-      title="确认发货"
-      :visible.sync="dialogVisible"
-      width="30%"
-    >
+    <el-dialog title="确认发货" :visible.sync="dialogVisible" width="30%">
       <span>确认已经发出货物?</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="receive">确 定</el-button>
-  </span>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="receive">确 定</el-button>
+      </span>
     </el-dialog>
     <div style="margin-left: 800px;width: 20px">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pageNum"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+        :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
     </div>
@@ -50,109 +41,109 @@
 </template>
 
 <script>
-  import bus from '@/bus.js'
-  export default {
-    name: "order",
-    data() {
-      return {
-        searchData:{},
-        dialogVisible: false,
-        tableData: [],
-        total: 0,
-        pageSize:10,
-        pageNum: 1,
-        dialogFormVisible: false,
-        form: {
-          content: '',
-          level: ''
-        },
-        name: '',
-        index: '',
-        commodityIndex: '',
-        orderId: '',
-        orderReceiveId: '',
-      }
-    },
-    props: {},
-    methods: {
-      handleSizeChange(val) {
-        this.pageSize=val
-        this.search()
+import bus from '@/bus.js'
+export default {
+  name: "order",
+  data() {
+    return {
+      searchData: {},
+      dialogVisible: false,
+      tableData: [],
+      total: 0,
+      pageSize: 10,
+      pageNum: 1,
+      dialogFormVisible: false,
+      form: {
+        content: '',
+        level: ''
       },
-      handleCurrentChange(val) {
-        this.pageNum=val
-        this.search()
-      },
-      openReceive(id) {
-        this.orderReceiveId = id
-        this.dialogVisible = true
-      },
-      receive() {
-        let param = {id: this.orderReceiveId, status: '已发货'}
-        this.$post('/order/receive', param, res => {
-          this.search()
-          this.dialogVisible = false
-        })
-      },
-      cancel() {
-        this.dialogFormVisible = false
-      },
-      count() {
-        let param = JSON.parse(JSON.stringify(this.searchData))
-          this.$post('/order/count', param, res => {
-            this.total = res.data
-          })
-      },
-      search() {
-        let param = JSON.parse(JSON.stringify(this.searchData))
-        param.pageable = {
-          skip: (this.pageNum - 1) * this.pageSize,
-          limit: this.pageSize,
-          sort: {id: 1}
-        }
-        this.$post('/order/search', param, res => {
-          this.tableData = res.data
-          this.count()
-        })
-      }
-    },
-    created() {
+      name: '',
+      index: '',
+      commodityIndex: '',
+      orderId: '',
+      orderReceiveId: '',
+    }
+  },
+  props: {},
+  methods: {
+    handleSizeChange(val) {
+      this.pageSize = val
       this.search()
-      bus.$on('onSearchOrder', () => {
-        this.searchData=this.$store.state.searchValue
-        this.pageNum=1
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val
+      this.search()
+    },
+    openReceive(id) {
+      this.orderReceiveId = id
+      this.dialogVisible = true
+    },
+    receive() {
+      let param = { id: this.orderReceiveId, status: '已发货' }
+      this.$post('/order/receive', param, res => {
         this.search()
+        this.dialogVisible = false
+      })
+    },
+    cancel() {
+      this.dialogFormVisible = false
+    },
+    count() {
+      let param = JSON.parse(JSON.stringify(this.searchData))
+      this.$post('/order/count', param, res => {
+        this.total = res.data
+      })
+    },
+    search() {
+      let param = JSON.parse(JSON.stringify(this.searchData))
+      param.pageable = {
+        skip: (this.pageNum - 1) * this.pageSize,
+        limit: this.pageSize,
+        sort: { id: 1 }
+      }
+      this.$post('/order/search', param, res => {
+        this.tableData = res.data
+        this.count()
       })
     }
+  },
+  created() {
+    this.search()
+    bus.$on('onSearchOrder', () => {
+      this.searchData = this.$store.state.searchValue
+      this.pageNum = 1
+      this.search()
+    })
   }
+}
 </script>
 
 <style scoped lang="less">
-  .div {
-    /deep/ .el-card {
-      border: 6px solid cornflowerblue;
-    }
+.div {
+  /deep/ .el-card {
+    border: 6px solid cornflowerblue;
   }
+}
 
-  .text {
-    font-size: 14px;
-  }
+.text {
+  font-size: 14px;
+}
 
-  .item {
-    margin-bottom: 18px;
-  }
+.item {
+  margin-bottom: 18px;
+}
 
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
 
-  .clearfix:after {
-    clear: both
-  }
+.clearfix:after {
+  clear: both
+}
 
-  .box-card {
-    width: 80%;
-  }
+.box-card {
+  width: 80%;
+}
 </style>

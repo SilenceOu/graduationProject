@@ -20,8 +20,6 @@ public interface UserService {
     public String updateOne(User user);
     //根据ID删除记录
     public String deleteOne(Integer id);
-    //获取总记录数
-    public Integer getTotalCount(User user);
     //获取购物车列表
     public List<Cart> getCart(Integer userId);
     //根据数量修改商品总价

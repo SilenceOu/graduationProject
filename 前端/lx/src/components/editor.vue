@@ -110,7 +110,6 @@ export default {
       }
     },
     onChange(ev){
-      console.log(111111)
       let file = ev.target.files[0];
       let param = new FormData();
       param.append('file',file);

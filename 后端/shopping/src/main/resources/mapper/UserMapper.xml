@@ -39,16 +39,4 @@
         delete from user where id=#{id}
     </delete>
 
-    <select id="getTotalCount" parameterType="user" resultType="Integer">
-        select count(*) from user
-        <trim prefix="where" prefixOverrides="and | or">
-            <if test="username != null and username != ''">
-                and username like "%"#{username}"%"
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone=#{phone}
-            </if>
-        </trim>
-    </select>
-
 </mapper>
