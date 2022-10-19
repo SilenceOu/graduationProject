@@ -8,7 +8,7 @@
             <if test="name != null and name != ''">
                 and name like "%"#{name}"%"
             </if>
-            <if test="status != null and status != ''">
+            <if test="status != null">
                 and status=#{status}
             </if>
         </trim>
@@ -16,12 +16,9 @@
 
 
     <select id="searchByStore" resultType="commodity" parameterType="commodity">
-        select * from commodity where status="上架"
+        select * from commodity where status = 1
             <if test="name != null and name != ''">
                 and name like "%"#{name}"%"
-            </if>
-            <if test="status != null and status != ''">
-                and status=#{status}
             </if>
     </select>
 

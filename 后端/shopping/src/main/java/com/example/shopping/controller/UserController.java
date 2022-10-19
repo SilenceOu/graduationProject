@@ -1,9 +1,6 @@
 package com.example.shopping.controller;
 
-import com.example.shopping.model.Address;
-import com.example.shopping.model.Cart;
-import com.example.shopping.model.LoginMessage;
-import com.example.shopping.model.User;
+import com.example.shopping.model.*;
 import com.example.shopping.result.Result;
 import com.example.shopping.result.ResultFactory;
 import com.example.shopping.service.UserService;
@@ -60,9 +57,10 @@ public class UserController {
         return userService.deleteOne(id);
     }
 
-    @RequestMapping(value = "/getCart",method = RequestMethod.POST)
-    public List<Cart> getCart(Integer userId){
-        return userService.getCart(userId);
+    @PostMapping("/getCart")
+    public Result getCart(Cart cart){
+        PageResult pageResult = userService.getCart(cart);
+        return ResultFactory.buildSuccessResult(pageResult);
     }
 
     @RequestMapping(value = "/updateCart",method = RequestMethod.POST)
@@ -80,9 +78,12 @@ public class UserController {
         userService.deleteCart(id);
     }
 
-    @RequestMapping(value = "/getAddress",method = RequestMethod.POST)
-    public List<Address> getAddress(Address address){
-        return userService.getAddress(address);
+    @PostMapping("/getAddress")
+    public Result getAddress(Address address){
+        PageHelper.startPage(address.getPageable().get("pageNum"),address.getPageable().get("pageSize"));
+        List<Address> addressList = userService.getAddress(address);
+        PageInfo<Address> addressPageInfo = new PageInfo<>(addressList);
+        return ResultFactory.buildSuccessResult(addressPageInfo);
     }
 
     @RequestMapping(value = "/updateAddress",method = RequestMethod.POST)

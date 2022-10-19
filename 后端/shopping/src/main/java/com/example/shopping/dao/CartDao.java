@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface CartDao {
     //获取用户的购物车列表
-    public List<Cart> selectCarts(Integer userId);
+    public List<Cart> selectCarts(Cart cart);
     //根据商品ID查找商品
     public Commodity selectCommodity(Integer commodityId);
     //根据ID修改商品总价

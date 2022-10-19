@@ -12,6 +12,6 @@ public class Commodity {
     private String content;
     private int money;
     private int number;
-    private String status;
+    private Integer status;
     private Map<String,Integer> pageable;
 }

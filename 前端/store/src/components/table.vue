@@ -14,7 +14,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-for="(item ,i) in tableColumn" :key="item" :label="item.label" :prop="item.prop" align="center">
+      <el-table-column v-for="(item ,i) in tableColumn" :key="item" :label="item.label" :prop="item.prop"
+        align="center">
       </el-table-column>
 
       <el-table-column width="210px" prop="number" label="数量" v-if="modal=='cart'" align="center">
@@ -40,6 +41,13 @@
       </el-table-column>
 
     </el-table>
+
+    <div style="margin-left: 50%;width: 20px" v-if="modal!=='downOrder'">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
+        :page-sizes="[2, 4, 6, 8]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
 
     <div v-if="modal=='cart'" style="margin-left: 900px">
       <h1>总价格:￥{{allMoney}}</h1>
@@ -72,7 +80,7 @@ export default {
       allMoney: 0,
       searchData: {},
       total: 0,
-      pageSize: 10,
+      pageSize: 2,
       pageNum: 1,
       tableData: [{
         date: '2016-05-03',
@@ -116,17 +124,16 @@ export default {
       })
     },
     search() {
-      let param = JSON.parse(JSON.stringify(this.searchData))
-      param.pageable = {
-        skip: (this.pageNum - 1) * this.pageSize,
-        limit: this.pageSize,
-        sort: { id: 1 }
+      this.searchData.pageable = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
-      console.log(param.pageable)
+      let param = JSON.parse(JSON.stringify(this.searchData))
+
       if (this.modal == 'commodity') {
         this.$post('/commodity/search', param, res => {
           console.log(res.data)
-          this.count()
+          
           this.tableData = res.data
         })
       }
@@ -134,39 +141,35 @@ export default {
         param.userId = JSON.parse(localStorage.getItem('user')).id
         this.$post('/order/searchByUser', param, res => {
           console.log(res.data)
-          this.count()
+          
           this.tableData = res.data
         })
       }
       if (this.modal == 'manager') {
         this.$post('/manager/search', param, res => {
           console.log(res.data)
-          this.count()
           this.tableData = res.data
         })
       }
       if (this.modal == 'cart') {
         param.userId = JSON.parse(localStorage.getItem('user')).id
         this.$post('/user/getCart', param, res => {
-          console.log(res.data)
-          this.tableData = res.data
+          this.tableData = res.data.result.list
+          this.total = res.data.result.total
         })
       }
       if (this.modal == 'address' || this.modal == 'downOrderAddress') {
         param.userId = JSON.parse(localStorage.getItem('user')).id
         this.$post('/user/getAddress', param, res => {
-          console.log(res.data)
-
-          this.tableData = res.data
+          this.tableData = res.data.result.list
+          this.total = res.data.result.total
           if (this.modal == 'downOrderAddress') {
             this.addressRow = this.tableData[0]
           }
         })
       }
     },
-    count() {
 
-    },
     downOrder() {
       let param = []
       this.multipleSelection.map((s, i) => {

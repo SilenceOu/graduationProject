@@ -1,9 +1,6 @@
 package com.example.shopping.service;
 
-import com.example.shopping.model.Address;
-import com.example.shopping.model.Cart;
-import com.example.shopping.model.LoginMessage;
-import com.example.shopping.model.User;
+import com.example.shopping.model.*;
 
 import java.util.List;
 
@@ -21,7 +18,7 @@ public interface UserService {
     //根据ID删除记录
     public String deleteOne(Integer id);
     //获取购物车列表
-    public List<Cart> getCart(Integer userId);
+    PageResult getCart(Cart cart);
     //根据数量修改商品总价
     public void updateCart(Cart cart);
     //加入购物车

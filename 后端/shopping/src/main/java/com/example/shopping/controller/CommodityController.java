@@ -28,9 +28,12 @@ public class CommodityController {
         return ResultFactory.buildSuccessResult(commodityPageInfo);
     }
 
-    @RequestMapping(value = "/searchByStore",method = RequestMethod.POST)
-    public List<Commodity> searchByStore(Commodity commodity){
-        return commodityService.searchByStore(commodity);
+    @PostMapping("/searchByStore")
+    public Result searchByStore(Commodity commodity){
+        PageHelper.startPage(commodity.getPageable().get("pageNum"),commodity.getPageable().get("pageSize"));
+        List<Commodity> commodityList = commodityService.searchByStore(commodity);
+        PageInfo<Commodity> commodityPageInfo = new PageInfo<>(commodityList);
+        return ResultFactory.buildSuccessResult(commodityPageInfo);
     }
 
     @RequestMapping(value = "/get",method = RequestMethod.POST)

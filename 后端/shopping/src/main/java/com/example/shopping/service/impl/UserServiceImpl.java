@@ -82,16 +82,33 @@ public class UserServiceImpl implements UserService {
 
     //获取用户下的购物车
     @Override
-    public List<Cart> getCart(Integer userId) {
-        List<Cart> carts = cartDao.selectCarts(userId);
-        for (Cart cart : carts) {
-            int commodityId = cart.getCommodityId();
+    public PageResult getCart(Cart cart) {
+        List<Cart> carts = cartDao.selectCarts(cart);
+        for (Cart cart1 : carts) {
+            int commodityId = cart1.getCommodityId();
             Commodity commodity = cartDao.selectCommodity(commodityId);
-            cart.setName(commodity.getName());
-            cart.setMoney(commodity.getMoney());
-            cart.setImage(commodity.getImage());
+            cart1.setName(commodity.getName());
+            cart1.setMoney(commodity.getMoney());
+            cart1.setImage(commodity.getImage());
         }
-        return carts;
+
+        //这里分页既不能用pagehleper，也不能用sql中的limit语句，所以只能用暴力算法来分页了
+        //分页前的总数total
+        Integer total = carts.size();
+        //开始索引
+        Integer beginIndex = (cart.getPageable().get("pageNum") - 1) * cart.getPageable().get("pageSize");
+        //结束索引
+        Integer endIndex = cart.getPageable().get("pageNum") * cart.getPageable().get("pageSize");
+        //分页后的list
+        //注意索引越界异常，因此执行subList方法前要校验结束索引是否大于总数，若大于则将总数赋值给结束索引
+        if (endIndex > total){
+            endIndex = total;
+        }
+        List<Cart> cartList = carts.subList(beginIndex, endIndex);
+        PageResult pageResult = new PageResult<Cart>();
+        pageResult.setTotal(total);
+        pageResult.setList(cartList);
+        return pageResult;
     }
     //修改商品数量改变商品总价
     @Override

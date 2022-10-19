@@ -96,7 +96,7 @@ export default {
       }
       let param = JSON.parse(JSON.stringify(this.searchData))
       this.$post('/order/search', param, res => {
-        this.tableData = res.data.result.orderList
+        this.tableData = res.data.result.list
         this.total = res.data.result.total
       })
     }

@@ -1,7 +1,7 @@
 package com.example.shopping.controller;
 
 import com.example.shopping.model.Order;
-import com.example.shopping.model.OrderResult;
+import com.example.shopping.model.PageResult;
 import com.example.shopping.result.Result;
 import com.example.shopping.result.ResultFactory;
 import com.example.shopping.service.OrderService;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -21,13 +19,15 @@ public class OrderController {
 
     @PostMapping("/search")
     public Result search(Order order){
-        OrderResult orderResult = orderService.search(order);
-        return ResultFactory.buildSuccessResult(orderResult);
+        PageResult pageResult = orderService.search(order);
+        return ResultFactory.buildSuccessResult(pageResult);
     }
 
-    @RequestMapping(value = "/searchByUser",method = RequestMethod.POST)
-    public List<Order> searchByUser(Order order){
-        return orderService.searchByUser(order);
+    @PostMapping("/searchByUser")
+    public Result searchByUser(Order order){
+        PageResult pageResult = orderService.searchByUser(order);
+        return ResultFactory.buildSuccessResult(pageResult);
+
     }
 
     @RequestMapping(value = "/receive",method = RequestMethod.POST)
