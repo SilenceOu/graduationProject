@@ -1,8 +1,12 @@
 package com.example.shopping.controller;
 
 import com.example.shopping.model.Order;
+import com.example.shopping.model.OrderResult;
+import com.example.shopping.result.Result;
+import com.example.shopping.result.ResultFactory;
 import com.example.shopping.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +19,10 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
-    public List<Order> search(Order order){
-        return orderService.search(order);
+    @PostMapping("/search")
+    public Result search(Order order){
+        OrderResult orderResult = orderService.search(order);
+        return ResultFactory.buildSuccessResult(orderResult);
     }
 
     @RequestMapping(value = "/searchByUser",method = RequestMethod.POST)

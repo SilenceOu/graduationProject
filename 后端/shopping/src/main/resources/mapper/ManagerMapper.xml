@@ -39,15 +39,4 @@
         delete from manager where id=#{id}
     </delete>
 
-    <select id="getTotalCount" parameterType="manager" resultType="Integer">
-        select count(*) from manager
-        <trim prefix="where" prefixOverrides="and | or">
-            <if test="username != null and username != ''">
-                and username like "%"#{username}"%"
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone=#{phone}
-            </if>
-        </trim>
-    </select>
 </mapper>

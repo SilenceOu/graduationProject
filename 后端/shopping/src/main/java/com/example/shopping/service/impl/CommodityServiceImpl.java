@@ -5,7 +5,7 @@ import com.example.shopping.dao.CommodityDao;
 import com.example.shopping.model.Comm;
 import com.example.shopping.model.Commodity;
 import com.example.shopping.model.CountNumber;
-import com.example.shopping.model.Result;
+import com.example.shopping.model.CommodityResult;
 import com.example.shopping.service.CommodityService;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +24,6 @@ public class CommodityServiceImpl implements CommodityService {
         return commodityDao.search(commodity);
     }
 
-    @Override
-    public Integer getTotalCount(Commodity commodity) {
-        return commodityDao.getTotalCount(commodity);
-    }
 
     @Override
     public List<Commodity> searchByStore(Commodity commodity) {
@@ -65,10 +61,10 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
-    public Result countNumber(List<CountNumber> countNumber) {
+    public CommodityResult countNumber(List<CountNumber> countNumber) {
         int index = 0, num = 0;
         List<Commodity> commodityList = new ArrayList<>();
-        Result result = new Result();
+        CommodityResult commodityResult = new CommodityResult();
         for (CountNumber count : countNumber) {
             Commodity commodity = commodityDao.selectByName(count.getName());
             if (commodity != null) {
@@ -82,13 +78,13 @@ public class CommodityServiceImpl implements CommodityService {
             }
         }
         if (index == countNumber.size() && num == countNumber.size()) {
-            result.setMemo("可以下单");
-            return result;
+            commodityResult.setMemo("可以下单");
+            return commodityResult;
         } else if (index == countNumber.size() && num < countNumber.size()) {
-            result.setCommodityList(commodityList);
-            return result;
+            commodityResult.setCommodityList(commodityList);
+            return commodityResult;
         }else
-            return result;
+            return commodityResult;
     }
 
     @Override

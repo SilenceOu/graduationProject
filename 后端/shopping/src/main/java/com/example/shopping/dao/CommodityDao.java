@@ -10,8 +10,6 @@ import java.util.List;
 public interface CommodityDao {
     //根据实体条件去查询
     public List<Commodity> search(Commodity commodity);
-    //获取总记录数
-    public Integer getTotalCount(Commodity commodity);
     //根据实体条件去查询上架商品
     public List<Commodity> searchByStore(Commodity commodity);
     //根据ID查找

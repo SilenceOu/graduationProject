@@ -2,14 +2,15 @@ package com.example.shopping.controller;
 
 import com.example.shopping.model.Comm;
 import com.example.shopping.model.Commodity;
+import com.example.shopping.model.CommodityResult;
 import com.example.shopping.model.CountNumber;
-import com.example.shopping.model.Result;
+import com.example.shopping.result.Result;
+import com.example.shopping.result.ResultFactory;
 import com.example.shopping.service.CommodityService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,14 +20,12 @@ public class CommodityController {
     @Autowired
     private CommodityService commodityService;
 
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
-    public List<Commodity> search(Commodity commodity){
-        return commodityService.search(commodity);
-    }
-
-    @RequestMapping(value = "/count",method = RequestMethod.POST)
-    public Integer count(Commodity commodity){
-        return commodityService.getTotalCount(commodity);
+    @PostMapping("/search")
+    public Result search(Commodity commodity){
+        PageHelper.startPage(commodity.getPageable().get("pageNum"),commodity.getPageable().get("pageSize"));
+        List<Commodity> commodityList = commodityService.search(commodity);
+        PageInfo<Commodity> commodityPageInfo = new PageInfo<>(commodityList);
+        return ResultFactory.buildSuccessResult(commodityPageInfo);
     }
 
     @RequestMapping(value = "/searchByStore",method = RequestMethod.POST)
@@ -60,7 +59,7 @@ public class CommodityController {
     }
 
     @RequestMapping(value = "/countNumber",method = RequestMethod.POST)
-    public Result countNumber(@RequestBody List<CountNumber> countNumber){
+    public CommodityResult countNumber(@RequestBody List<CountNumber> countNumber){
         return commodityService.countNumber(countNumber);
     }
 

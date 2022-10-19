@@ -2,6 +2,8 @@ package com.example.shopping.model;
 
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 public class Commodity {
     private int id;
@@ -11,4 +13,5 @@ public class Commodity {
     private int money;
     private int number;
     private String status;
+    private Map<String,Integer> pageable;
 }

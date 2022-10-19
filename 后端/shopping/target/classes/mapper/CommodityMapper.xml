@@ -14,17 +14,6 @@
         </trim>
     </select>
 
-    <select id="getTotalCount" parameterType="commodity" resultType="Integer">
-        select count(*) from commodity
-        <trim prefix="where" prefixOverrides="and | or">
-            <if test="name != null and name != ''">
-                and name like "%"#{name}"%"
-            </if>
-            <if test="status != null and status != ''">
-                and status=#{status}
-            </if>
-        </trim>
-    </select>
 
     <select id="searchByStore" resultType="commodity" parameterType="commodity">
         select * from commodity where status="上架"

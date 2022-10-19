@@ -3,6 +3,8 @@ package com.example.shopping.model;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
+
 @Data
 public class Order {
     private int id;
@@ -20,4 +22,5 @@ public class Order {
     private String number;
     private int[] numbers;
     private String[] names;
+    private Map<String,Integer> pageable;
 }

@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.util.List;
 @Data
-public class Result {
+public class CommodityResult {
     private List<Commodity> commodityList;
     private String memo;
 }

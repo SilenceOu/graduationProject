@@ -67,9 +67,4 @@ public class ManagerServiceImpl implements ManagerService {
             return "删除失败";
         }
     }
-
-    @Override
-    public Integer getTotalCount(Manager manager) {
-        return managerDao.getTotalCount(manager);
-    }
 }

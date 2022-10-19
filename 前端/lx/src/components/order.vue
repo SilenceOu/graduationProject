@@ -33,7 +33,7 @@
     </el-dialog>
     <div style="margin-left: 800px;width: 20px">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
-        :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="[2, 4, 6, 8]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
     </div>
@@ -50,7 +50,7 @@ export default {
       dialogVisible: false,
       tableData: [],
       total: 0,
-      pageSize: 10,
+      pageSize: 2,
       pageNum: 1,
       dialogFormVisible: false,
       form: {
@@ -88,22 +88,16 @@ export default {
     cancel() {
       this.dialogFormVisible = false
     },
-    count() {
-      let param = JSON.parse(JSON.stringify(this.searchData))
-      this.$post('/order/count', param, res => {
-        this.total = res.data
-      })
-    },
+   
     search() {
-      let param = JSON.parse(JSON.stringify(this.searchData))
-      param.pageable = {
-        skip: (this.pageNum - 1) * this.pageSize,
-        limit: this.pageSize,
-        sort: { id: 1 }
+      this.searchData.pageable = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
+      let param = JSON.parse(JSON.stringify(this.searchData))
       this.$post('/order/search', param, res => {
-        this.tableData = res.data
-        this.count()
+        this.tableData = res.data.result.orderList
+        this.total = res.data.result.total
       })
     }
   },

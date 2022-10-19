@@ -99,12 +99,12 @@ export default {
 
     },
     search() {
-      this.searchData.pageable =  {
+      this.searchData.pageable = {
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }
       let param = JSON.parse(JSON.stringify(this.searchData))
-    
+
       if (this.modal == 'commodity') {
         this.$post('/commodity/search', param, res => {
           console.log(res.data)
@@ -128,7 +128,7 @@ export default {
       }
 
     },
-     
+
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },

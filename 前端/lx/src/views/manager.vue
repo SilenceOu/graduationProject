@@ -1,12 +1,7 @@
 <template>
   <div>
-    <search
-    ></search>
-    <z-table
-      ref="table"
-      @edit="newEdit"
-    :column="column"
-    :modal="'manager'"></z-table>
+    <search></search>
+    <z-table ref="table" @edit="newEdit" :column="column" :modal="'manager'"></z-table>
     <el-dialog title="编辑" :visible.sync="dialogFormVisible" destroy-on-close>
       <el-form :model="form">
         <el-form-item label="用户名" label-width="120px">
@@ -31,60 +26,60 @@
 </template>
 
 <script>
-  export default {
-    name: "manager",
-    data(){
-      return{
-        show:false,
-        column:[
-          {prop:'username',label:'用户名'},
-          {prop:'phone',label:'联系方式'}
-        ],
-        dialogFormVisible: false,
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: '',
-          avatar:''
-        },
-      }
+export default {
+  name: "manager",
+  data() {
+    return {
+      show: false,
+      column: [
+        { prop: 'username', label: '用户名' },
+        { prop: 'phone', label: '联系方式' }
+      ],
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: '',
+        avatar: ''
+      },
+    }
+  },
+  methods: {
+    cancel() {
+      this.dialogFormVisible = false
     },
-    methods:{
-      cancel(){
-        this.dialogFormVisible=false
-      },
-      newEdit(e){
-        let param = {id:e.id}
-        this.$post('/manager/get', param, res => {
-          this.form=res.data
-          this.form.avatar=[res.data.avatar]
-          this.show=true
-          this.dialogFormVisible=true
-        })
-      },
-      save(){
-        this.$refs.upload.handleSave()
-        this.form.avatar=this.$refs.upload.saveList[0]
-        let param = this.form
-        console.log(param)
-        this.$post('/manager/update', param, res => {
-          this.dialogFormVisible=false
-          this.$refs.table.search()
-        })
-      }
+    newEdit(e) {
+      let param = { id: e.id }
+      this.$post('/manager/get', param, res => {
+        this.form = res.data
+        this.form.avatar = [res.data.avatar]
+        this.show = true
+        this.dialogFormVisible = true
+      })
+    },
+    save() {
+      this.$refs.upload.handleSave()
+      this.form.avatar = this.$refs.upload.saveList[0]
+      let param = this.form
+      console.log(param)
+      this.$post('/manager/update', param, res => {
+        this.dialogFormVisible = false
+        this.$refs.table.search()
+      })
+    }
 
-    },
-    watch:{
-      dialogFormVisible(e){
-        this.show=e
-      }
+  },
+  watch: {
+    dialogFormVisible(e) {
+      this.show = e
     }
   }
+}
 </script>
 
 <style scoped>

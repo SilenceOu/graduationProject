@@ -7,6 +7,7 @@ import com.example.shopping.dao.OrderDao;
 import com.example.shopping.model.Address;
 import com.example.shopping.model.Commodity;
 import com.example.shopping.model.Order;
+import com.example.shopping.model.OrderResult;
 import com.example.shopping.service.OrderService;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private CartDao cartDao;
 
     @Override
-    public List<Order> search(Order order) {
+    public OrderResult search(Order order) {
         List<Integer> addressIds = addressDao.selectIdByCondition(order.getName(), order.getPhone());
         ArrayList<Order> list = new ArrayList<>();
         for (Integer addressId : addressIds) {
@@ -63,7 +64,24 @@ public class OrderServiceImpl implements OrderService {
             //集合累加
             list.addAll(orders);
         }
-        return list;
+
+        //这里分页既不能用pagehleper，也不能用sql中的limit语句，所以只能用暴力算法来分页了
+        //分页前的总数total
+        Integer total = list.size();
+        //开始索引
+        Integer beginIndex = (order.getPageable().get("pageNum") - 1) * order.getPageable().get("pageSize");
+        //结束索引
+        Integer endIndex = order.getPageable().get("pageNum") * order.getPageable().get("pageSize");
+        //分页后的list
+        //注意索引越界异常，因此执行subList方法前要校验结束索引是否大于总数，若大于则将总数赋值给结束索引
+        if (endIndex > total){
+            endIndex = total;
+        }
+        List<Order> orderList = list.subList(beginIndex, endIndex);
+        OrderResult orderResult = new OrderResult();
+        orderResult.setTotal(total);
+        orderResult.setOrderList(orderList);
+        return orderResult;
     }
 
     @Override

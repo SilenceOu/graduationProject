@@ -17,6 +17,4 @@ public interface ManagerService {
     public String updateOne(Manager manager);
     //根据ID删除记录
     public String deleteOne(Integer id);
-    //获取总记录数
-    public Integer getTotalCount(Manager manager);
 }

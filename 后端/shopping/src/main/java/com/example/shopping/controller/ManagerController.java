@@ -1,9 +1,14 @@
 package com.example.shopping.controller;
 
 import com.example.shopping.model.Manager;
+import com.example.shopping.result.Result;
+import com.example.shopping.result.ResultFactory;
 import com.example.shopping.service.ManagerService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,9 +33,12 @@ public class ManagerController {
         return managerService.register(manager);
     }
 
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
-    public List<Manager> search(Manager manager){
-        return managerService.search(manager);
+    @PostMapping("/search")
+    public Result search(Manager manager){
+        PageHelper.startPage(manager.getPageable().get("pageNum"),manager.getPageable().get("pageSize"));
+        List<Manager> managerList = managerService.search(manager);
+        PageInfo<Manager> managerPageInfo = new PageInfo<>(managerList);
+        return ResultFactory.buildSuccessResult(managerPageInfo);
     }
 
     @RequestMapping(value = "/get",method = RequestMethod.POST)
@@ -48,8 +56,4 @@ public class ManagerController {
         return managerService.deleteOne(id);
     }
 
-    @RequestMapping(value = "/count",method = RequestMethod.POST)
-    public Integer count(Manager manager){
-        return managerService.getTotalCount(manager);
-    }
 }
