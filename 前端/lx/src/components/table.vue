@@ -21,8 +21,8 @@
         <template slot-scope="scope">
           <el-button v-if="modal!=='user'" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑
           </el-button>
-          <el-button v-if="modal=='commodity'" size="mini" :type="scope.row.status=='上架'?'danger':'primary'"
-            @click=" updateStatus(scope.$index, scope.row)">{{scope.row.status=='上架'?'下架':'上架'}}
+          <el-button v-if="modal=='commodity'" size="mini" :type="scope.row.status== 1 ?'danger':'primary'"
+            @click=" updateStatus(scope.$index, scope.row)">{{scope.row.status== 1 ?'下架':'上架'}}
           </el-button>
           <el-button v-if="modal!=='commodity'" size="mini" type="danger"
             @click="handleDelete(scope.$index, scope.row)">删除
@@ -32,7 +32,7 @@
     </el-table>
     <div style="margin-left: 70%;width: 20px">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
-        :page-sizes="[1, 2, 3, 4]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="[5, 10, 15, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
     </div>
@@ -48,7 +48,7 @@ export default {
     return {
       searchData: {},
       total: 0,
-      pageSize: 1,
+      pageSize: 5,
       pageNum: 1,
       tableData: [{
         id: '',
@@ -77,8 +77,8 @@ export default {
   },
   methods: {
     updateStatus(i, e) {
-      let param = { id: e.id, status: e.status == '上架' ? '下架' : '上架' }
-      this.$confirm(`确定${e.status == '上架' ? '下架' : '上架'}该商品, 是否继续?`, '提示', {
+      let param = { id: e.id, status: e.status == 1 ? 2 : 1 }
+      this.$confirm(`确定${e.status == 1 ? '下架' : '上架'}该商品, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -88,7 +88,7 @@ export default {
         })
         this.$message({
           type: 'success',
-          message: `${e.status == '上架' ? '下架' : '上架'}成功!`
+          message: `${e.status == 1 ? '下架' : '上架'}成功!`
         });
       }).catch(() => {
         this.$message({

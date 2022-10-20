@@ -14,7 +14,7 @@
           <el-input v-model="form.phone" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="头像" label-width="120px" v-if="show">
-          <z-upload ref="upload" :imgList="form.avatar"></z-upload>
+          <z-upload ref="upload" :imgUrl="form.avatar"></z-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -36,17 +36,7 @@ export default {
         { prop: 'phone', label: '联系方式' }
       ],
       dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
-        avatar: ''
-      },
+      form: {},
     }
   },
   methods: {
@@ -57,16 +47,15 @@ export default {
       let param = { id: e.id }
       this.$post('/manager/get', param, res => {
         this.form = res.data
-        this.form.avatar = [res.data.avatar]
         this.show = true
         this.dialogFormVisible = true
       })
     },
     save() {
-      this.$refs.upload.handleSave()
-      this.form.avatar = this.$refs.upload.saveList[0]
+      this.form.avatar = this.$refs.upload.defaultUrl
+      this.form.pageable = {}
       let param = this.form
-      console.log(param)
+ 
       this.$post('/manager/update', param, res => {
         this.dialogFormVisible = false
         this.$refs.table.search()

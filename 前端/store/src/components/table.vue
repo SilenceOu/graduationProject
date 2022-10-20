@@ -44,7 +44,7 @@
 
     <div style="margin-left: 50%;width: 20px" v-if="modal!=='downOrder'">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
-        :page-sizes="[2, 4, 6, 8]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="[5, 10, 15, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
     </div>
@@ -80,7 +80,7 @@ export default {
       allMoney: 0,
       searchData: {},
       total: 0,
-      pageSize: 2,
+      pageSize: 5,
       pageNum: 1,
       tableData: [{
         date: '2016-05-03',

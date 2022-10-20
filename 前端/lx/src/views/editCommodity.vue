@@ -16,7 +16,7 @@
                          label="描述文字"></el-input-number>
       </el-form-item>
       <el-form-item label="商品图片" v-if="show">
-        <z-upload ref="upload" :imgList="formLabelAlign.image"></z-upload>
+        <z-upload ref="upload" :imgUrl="formLabelAlign.image"></z-upload>
       </el-form-item>
       <el-form-item label="图文详情">
         <editor style="height: 400px" :defaultContent="formLabelAlign.content"
@@ -51,8 +51,9 @@
         this.formLabelAlign.number = val
       },
       saveGoods() {
-        this.$refs.upload.handleSave()
-        this.formLabelAlign.image = this.$refs.upload.saveList[0]
+        
+        this.formLabelAlign.image = this.$refs.upload.defaultUrl
+        this.formLabelAlign.pageable = {}
         let param = this.formLabelAlign
         if (this.$route.query.id) {
           param.id=this.$route.query.id

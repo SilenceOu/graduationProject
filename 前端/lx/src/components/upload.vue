@@ -1,98 +1,64 @@
 <template>
-  <div>
-    <!--    <el-upload-->
-    <!--      action="http://localhost:3001/upload/headImage"-->
-    <!--      list-type="picture-card"-->
-    <!--      :on-preview="handlePictureCardPreview"-->
-    <!--      :on-remove="handleRemove">-->
-    <!--      <i class="el-icon-plus"></i>-->
-    <!--    </el-upload>-->
-    <!--    <el-dialog :visible.sync="dialogVisible">-->
-    <!--      <img width="100%" :src="dialogImageUrl" alt="">-->
-    <!--    </el-dialog>-->
-    <el-upload
-      ref="upload"
-      action="http://localhost:3001/upload/headImage"
-      list-type="picture-card"
-      :file-list="defaultList"
-      :limit="limit"
-      :on-preview="handlePictureCardPreview"
-      :on-remove="handleRemove"
-      :on-success="handleSuccess"
-      :on-exceed="handleExceed"
-      :beforeUpload="onBeforeUpload"
-    >
-      <i class="el-icon-plus"></i>
-    </el-upload>
-    <el-dialog :visible.sync="dialogVisible"  :modal-append-to-body='false'>
-      <img width="100%" :src="dialogImageUrl" alt="">
-    </el-dialog>
-  </div>
+  <el-upload class="avatar-uploader" action="http://localhost:8010/file/upload/img" :show-file-list="false"
+    :on-success="handleAvatarSuccess">
+    <img v-if="defaultUrl" :src="defaultUrl" class="avatar" />
+    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+  </el-upload>
+
 </template>
 
 <script>
+
 export default {
   name: "upload",
-  data(){
-    return{
-      defaultList:[],
-      dialogImageUrl: '',
-      dialogVisible: false,
-      saveList:[]
+  data() {
+    return {
+      defaultUrl: ''
     }
   },
-  props:{
-    imgList: {
-      type: Array,
-      default: []
-    },
-  },
-  watch:{
-
-  },
-  methods:{
-    handleSave(){
-      this.defaultList.map((s)=>{
-        this.saveList=[]
-        this.saveList.push(s.response.data)
-      })
-
-    },
-    handleSuccess(response, file, fileList){
-      console.log(response,file, fileList);
-      this.defaultList.push(file);
-      console.log(this.defaultList)
-
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-      let index = fileList.findIndex(s=>{
-        return s.uid === file.uid;
-      });
-      console.log(index);
-      this.defaultList.splice(index,1);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+  props: {
+    imgUrl: {
+      type: String,
+      default: ''
     }
+  },
+  methods: {
+    handleAvatarSuccess(res) {
+      //res就是文件路径
+      this.defaultUrl = res;
+    },
   },
   created() {
-    this.imgList.map((item,i)=>{
-      this.defaultList.push(
-        {
-          name: i,
-          url:item,
-          response:{
-            data:item
-          }
-        }
-      )
-    })
+    this.defaultUrl = this.imgUrl
   }
-}
+
+};
+
 </script>
 
 <style scoped>
+.avatar-uploader-icon {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-size: 28px;
+  color: #8c939d;
+  width: 250px;
+  height: 150px;
+  line-height: 150px;
+  text-align: center;
+}
 
+.avatar-uploader-icon:hover {
+  border-color: #409eff;
+}
+
+.avatar {
+  width: 250px;
+  height: 150px;
+  display: block;
+}
 </style>
+

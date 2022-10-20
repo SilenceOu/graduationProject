@@ -13,7 +13,7 @@
         <el-input v-model="formLabelAlign.phone" style="width: 300px"></el-input>
       </el-form-item>
       <el-form-item label="头像">
-        <z-upload ref="upload" :imgList="formLabelAlign.avatar"></z-upload>
+        <z-upload ref="upload" :imgUrl="formLabelAlign.avatar"></z-upload>
       </el-form-item>
     </el-form>
     <el-button v-if="!$route.query.id" @click="register(0)">注册</el-button>
@@ -37,10 +37,10 @@
     },
     methods: {
       register(e) {
-        this.$refs.upload.handleSave()
+        this.formLabelAlign.avatar = this.$refs.upload.defaultUrl
+        this.formLabelAlign.pageable = {}
         let param = this.formLabelAlign
-        this.formLabelAlign.avatar = this.$refs.upload.saveList[0]
-        console.log(param)
+        
         if (!e) {
           this.$post('/user/register', param, res => {
             if (res.data == '注册成功' ){
